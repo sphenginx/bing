@@ -7,7 +7,7 @@
  **/
 class Bing
 {
-    //获取bing背景图片的url
+    //获取bing背景图片的url: format = js 为json格式数据(默认为xml数据)，idx=0表示获取今天的图片，-1为明天，1表示昨天
     const BG_PIC_XHR_URL = 'http://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&pid=hp&video=1';
 
     const PIC_FILE_PATH = 'bingPic.ini';
