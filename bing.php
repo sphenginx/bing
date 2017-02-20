@@ -66,7 +66,7 @@ class Bing
      **/
     private function _saveFile($url, $saveDir)
     {
-        $file_name = substr($url, strrpos($url, '/'));
+        $file_name = $saveDir . substr($url, strrpos($url, '/'));
         $opts = array(
             'http' => array(
                 'method'  => 'GET',
@@ -75,8 +75,8 @@ class Bing
             )
         );
         $context = stream_context_create($opts);
-        if (!copy($url, $saveDir . $file_name, $context)) {
-            echo 'failed copy file ' . $url . ' to ' . $saveDir.$file_name . '<br/> ';
+        if (!copy($url, $file_name, $context)) {
+            echo 'failed copy file ' . $url . ' to ' . $file_name . '<br/> ';
         }
     }
 
