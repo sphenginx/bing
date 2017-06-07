@@ -21,7 +21,7 @@ class Bing
     /**
      * 检测是否下载了今天的图片
      *
-     * @return void
+     * @return boolean
      * @author Sphenginx
      **/
     private function _isDownload()
@@ -61,7 +61,7 @@ class Bing
     /**
      * 保存文件
      *
-     * @return void
+     * @return mixed
      * @author Sphenginx
      **/
     private function _saveFile($url, $saveDir)
@@ -76,42 +76,46 @@ class Bing
         );
         $context = stream_context_create($opts);
         if (!copy($url, $file_name, $context)) {
-            echo 'failed copy file ' . $url . ' to ' . $file_name . '<br/> ';
+            throw new \Exception('failed copy file ' . $url . ' to ' . $file_name);   
         }
     }
 
     /**
      * 下载bing图片
      *
-     * @return void
+     * @return mixed
      * @author Sphenginx
      **/
     public function run()
     {
-        if ($this->_isDownload()) {
-            exit('今天的图片已经下载过了');
-        }
-        $picObj = file_get_contents(self::BG_PIC_XHR_URL);
-        $picObj = json_decode($picObj, true);
-        if (!$picObj) {
-            exit('获取bing背景信息失败！');
-        }
+        try {
+            if ($this->_isDownload()) {
+                throw new \Exception('今天的图片已经下载过了');
+            }
+            $picObj = file_get_contents(self::BG_PIC_XHR_URL);
+            $picObj = json_decode($picObj, true);
+            if (!$picObj) {
+                throw new \Exception('获取bing背景信息失败！');
+            }
 
-        $this->_bg_name = $picObj['images'][0]['copyright'];
-        //获取背景图片
-        if (isset($picObj['images'][0]['vid']['image'])) {
-            $this->_bg_img = "http:". $picObj['images'][0]['vid']['image'];
-        } else {
-            $this->_bg_img = "http://cn.bing.com".$picObj['images'][0]['url'];
-        }
+            $this->_bg_name = $picObj['images'][0]['copyright'];
+            //获取背景图片
+            if (isset($picObj['images'][0]['vid']['image'])) {
+                $this->_bg_img = "http:". $picObj['images'][0]['vid']['image'];
+            } else {
+                $this->_bg_img = "http://cn.bing.com".$picObj['images'][0]['url'];
+            }
 
-        //获取背景视频
-        if (isset($picObj['images'][0]['vid']['sources'][0])) {
-            $this->_bg_video = "http:". $picObj['images'][0]['vid']['sources'][0][2];
+            //获取背景视频
+            if (isset($picObj['images'][0]['vid']['sources'][0])) {
+                $this->_bg_video = "http:". $picObj['images'][0]['vid']['sources'][0][2];
+            }
+            $this->_download();
+            $this->_record();
+            echo 'download  success!';
+        } catch (\Exception $e) {
+            exit($e->getMessage());
         }
-        $this->_download();
-        $this->_record();
-        echo 'download  success!';
     }
 
 } // END class Bing
