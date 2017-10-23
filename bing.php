@@ -112,7 +112,7 @@ class Bing
             }
             $this->_download();
             $this->_record();
-            echo 'download  success!';
+            echo $this->_bg_name.'download  success!';
         } catch (\Exception $e) {
             exit($e->getMessage());
         }
