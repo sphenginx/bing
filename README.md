@@ -1,6 +1,10 @@
 # bing
 
-Crawling bing background image or video
+>Crawling `bing` background images or videos
+
+>and save Chrome extension `momentum`  background images
+
+>and save Windows spotlight images
 
 # instruction
 
