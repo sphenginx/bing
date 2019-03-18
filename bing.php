@@ -82,7 +82,14 @@ class Bing
      **/
     private function _saveFile($url, $saveDir)
     {
-        $file_name = $saveDir . substr($url, strrpos($url, '/'));
+        preg_match('/((\w|-)+\.jpg)/i', $url, $matchs);
+        // echo "<pre>";print_r($match);echo "</pre>";
+        if ($matchs) {
+            $file_name = $saveDir . current($matchs);
+        } else {
+            $file_name = $saveDir . substr($url, strrpos($url, '/'));
+        }
+        // echo "$url<br/>$file_name";exit;
         $opts = array(
             'http' => array(
                 'method'  => 'GET',
