@@ -117,13 +117,13 @@ class Bing
             if (!$picObj) {
                 throw new \Exception('获取bing背景信息失败！');
             }
-
-            $this->_bg_name = $picObj['images'][0]['copyright'];
+            $image = current($picObj['images']);
+            $this->_bg_name = $image['copyright'];
             //获取背景图片
-            if (isset($picObj['images'][0]['vid']['image'])) {
-                $this->_bg_img = "http:". $picObj['images'][0]['vid']['image'];
+            if (isset($image['vid']['image'])) {
+                $this->_bg_img = "http:". $image['vid']['image'];
             } else {
-                $this->_bg_img = "http://cn.bing.com".$picObj['images'][0]['url'];
+                $this->_bg_img = "http://cn.bing.com".$image['url'];
             }
 
             //修改是否下载的方法，可能是Git更新的文件时间，而不是下载更新的文件时间
@@ -132,8 +132,8 @@ class Bing
             }
 
             //获取背景视频
-            if (isset($picObj['images'][0]['vid']['sources'][0])) {
-                $this->_bg_video = "http:". $picObj['images'][0]['vid']['sources'][0][2];
+            if (isset($image['vid']['sources'][0])) {
+                $this->_bg_video = "http:". $image['vid']['sources'][0][2];
             }
             $this->_download();
             $this->_record();
@@ -147,5 +147,5 @@ class Bing
 
 //为防止网速慢影响，设置下最大执行时间
 set_time_limit(100);
-$bingObj = new Bing();
-$bingObj->run();
+$bing = new Bing();
+$bing->run();
