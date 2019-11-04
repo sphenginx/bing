@@ -138,8 +138,6 @@ class Bing
     public function run()
     {
         try {
-            // 切换到当前的目录
-            chdir(dir(__FILE__));
             $this->_shell("git pull");
             $picObj = file_get_contents(self::BG_PIC_XHR_URL);
             $picObj = json_decode($picObj, true);
