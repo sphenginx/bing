@@ -126,7 +126,20 @@ class Bing
      **/
     private function _shell($shell)
     {
-        echo nl2br(shell_exec($shell));
+        $msg = nl2br(shell_exec($shell));
+        // git 默认是 gb2312 编码，这里需要转换成 utf8， 否则页面输出会乱码
+        echo iconv("GB2312", "UTF-8//IGNORE", $msg); 
+    }
+
+    /**
+     * 设置header信息
+     *
+     * @return void
+     * @author Sphenginx
+     **/
+    private function _setHeader()
+    {
+        header("Content-type: text/html; charset=utf-8");
     }
 
     /**
@@ -137,6 +150,7 @@ class Bing
      **/
     public function run()
     {
+        $this->_setHeader();
         try {
             $this->_shell("git pull");
             $picObj = file_get_contents(self::BG_PIC_XHR_URL);
@@ -154,9 +168,9 @@ class Bing
             }
 
             //修改是否下载的方法，可能是Git更新的文件时间，而不是下载更新的文件时间
-            // if ($this->_isDownload()) {
-            //     throw new \Exception('今天的图片已经下载过了');
-            // }
+            if ($this->_isDownload()) {
+                throw new \Exception('今天的图片已经下载过了');
+            }
 
             //获取背景视频
             if (isset($image['vid']['sources'][0])) {
