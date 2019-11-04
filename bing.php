@@ -104,6 +104,32 @@ class Bing
     }
 
     /**
+     * 执行git 提交命令
+     *
+     * @return void
+     * @author Sphenginx
+     **/
+    private function _commit()
+    {
+        // 执行git 命令
+        $this->_shell("git add .");
+        $msg = substr($this->_bg_name, 0, strpos($this->_bg_name, '，'));
+        $this->_shell("git commit -m " . $msg);
+        $this->_shell("git push origin master");
+    }
+
+    /**
+     * 执行并输出 shell 命令
+     *
+     * @return void
+     * @author Sphenginx
+     **/
+    private function _shell($shell)
+    {
+        echo nl2br(shell_exec($shell));
+    }
+
+    /**
      * 下载bing图片
      *
      * @return mixed
@@ -112,6 +138,9 @@ class Bing
     public function run()
     {
         try {
+            // 切换到当前的目录
+            chdir(dir(__FILE__));
+            $this->_shell("git pull");
             $picObj = file_get_contents(self::BG_PIC_XHR_URL);
             $picObj = json_decode($picObj, true);
             if (!$picObj) {
@@ -127,9 +156,9 @@ class Bing
             }
 
             //修改是否下载的方法，可能是Git更新的文件时间，而不是下载更新的文件时间
-            if ($this->_isDownload()) {
-                throw new \Exception('今天的图片已经下载过了');
-            }
+            // if ($this->_isDownload()) {
+            //     throw new \Exception('今天的图片已经下载过了');
+            // }
 
             //获取背景视频
             if (isset($image['vid']['sources'][0])) {
@@ -137,6 +166,7 @@ class Bing
             }
             $this->_download();
             $this->_record();
+            $this->_commit();
             echo $this->_bg_name.'download  success!';
         } catch (\Exception $e) {
             exit($e->getMessage());
