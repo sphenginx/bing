@@ -113,7 +113,7 @@ class Bing
     {
         // 执行git 命令
         $this->_shell("git add .");
-        $msg = substr($this->_bg_name, 0, strpos($this->_bg_name, '，'));
+        $msg = "add: ".date("Y-m-d").' bing image '.substr($this->_bg_name, 0, strpos($this->_bg_name, '，'));
         // Git 是 gb2312 编码， 这里改下编码
         $_msg = iconv("UTF-8", "GB2312//IGNORE", $msg);
         $this->_shell("git commit -m " . $_msg);
