@@ -114,7 +114,9 @@ class Bing
         // 执行git 命令
         $this->_shell("git add .");
         $msg = substr($this->_bg_name, 0, strpos($this->_bg_name, '，'));
-        $this->_shell("git commit -m " . $msg);
+        // Git 是 gb2312 编码， 这里改下编码
+        $_msg = iconv("UTF-8", "GB2312//IGNORE", $msg);
+        $this->_shell("git commit -m " . $_msg);
         $this->_shell("git push origin master");
     }
 
