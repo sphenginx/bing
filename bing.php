@@ -121,7 +121,7 @@ class Bing
         if ($matchs) {
             $msg .= $matchs[1];
         }
-        $this->_shell("git commit -m " . $_msg);
+        $this->_shell("git commit -m " . $msg);
         $this->_shell("git push origin master");
     }
 
