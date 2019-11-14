@@ -114,9 +114,9 @@ class Bing
         // 执行git 命令
         $this->_shell("git add .");
         preg_match("/(?:\(©)(.*)(?:\))/i", $this->_bg_name, $matchs);
-        $msg = "add: ".date("Y-m-d").' bing image ';
+        $msg = "add: ".date("Y-m-d").' bing image';
         if ($this->_bg_video) {
-            $msg .= ' & video ';
+            $msg .= '、 video ';
         }
         if ($matchs) {
             $msg .= $matchs[1];
@@ -135,7 +135,9 @@ class Bing
     {
         $msg = nl2br(shell_exec($shell));
         // git 默认是 gb2312 编码，这里需要转换成 utf8， 否则页面输出会乱码
-        echo iconv("GB2312", "UTF-8//IGNORE", $msg); 
+        if ($msg) {
+            echo iconv("GB2312", "UTF-8//IGNORE", $msg); 
+        }
     }
 
     /**
